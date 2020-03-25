@@ -1,0 +1,86 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package filehandeling;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+/**
+ *
+ * @author Sajeevan
+ */
+public class FileHandeling {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+          File classes,schools;
+          Scanner classesReader,schoolsReader;
+        
+        ArrayList schoolsArrayList,classesArrayList;
+        schoolsArrayList  = new ArrayList();
+        classesArrayList = new ArrayList();
+        
+        try {
+            classes = new File("E:\\classes.txt");
+            schools = new File("E:\\schools.txt");
+            
+            classesReader = new Scanner(classes);
+            schoolsReader = new Scanner(schools);
+            
+            while(schoolsReader.hasNextLine()){
+                String txt = schoolsReader.nextLine();
+                if(!txt.isEmpty()){
+                    ArrayList school = new ArrayList(Arrays.asList(txt.split("\\|")));
+                    if(!schoolsArrayList.contains(school)){
+                        schoolsArrayList.add(school);
+                    } 
+                }   
+            }
+            
+            while(classesReader.hasNextLine()){
+                String txt = classesReader.nextLine();
+                if(!txt.isEmpty()){
+                    ArrayList classe = new ArrayList(Arrays.asList(txt.split("\\|")));
+                    if(!classesArrayList.contains(classe)){
+                        classesArrayList.add(classe);
+                    }    
+                }   
+            }
+            
+            Collections.sort(classesArrayList, (ArrayList<String> o1, ArrayList<String> o2) -> o1.get(2).compareTo(o2.get(2)));
+             
+             for(int i=0;i<schoolsArrayList.size();i++){
+                ArrayList school = (ArrayList) schoolsArrayList.get(i);
+                 System.out.println(school.get(1)+","+school.get(2));
+                 String schoolID = (String) school.get(0);
+                 String temp = "";
+                for(int j=0;j<classesArrayList.size();j++){
+                    ArrayList classe = (ArrayList) classesArrayList.get(j);
+                    if(classe.get(0).equals(schoolID)){
+                        if(temp.equals(classe.get(2))){
+                            System.out.println("\t\t" + classe.get(1) + " from " + classe.get(3).toString().substring(0,5) + " , " + classe.get(4));
+                        }else {
+                            temp = (String) classe.get(2);
+                            System.out.println("\tGrade " + temp);
+                            System.out.println("\t\t" + classe.get(1) + " from " + classe.get(3).toString().substring(0,5) + " , " + classe.get(4));
+                        }
+                    }
+                }
+                 
+             }
+             
+        }catch(FileNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+    
+    }
+    
+}
